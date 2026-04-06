@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="infos to be filled">
+    <title>infos to be filled</title>
+    <style>
+        /* ---------- RESET & 基础变量 ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-site: #f8fafc;
+            --card-white: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-card: 1.25rem;
+            --radius-md: 0.75rem;
+            --transition: all 0.2s ease;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Noto Sans', sans-serif;
+            background-color: var(--bg-site);
+            color: var(--text-primary);
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ---------- 头部 & 导航 ---------- */
+        .site-header {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border-light);
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .logo-area h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--accent), #1e40af);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .logo-area p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* ---------- 主体布局 (网格 + 侧边栏) ---------- */
+        .content-grid {
+            display: flex;
+            gap: 2.5rem;
+            margin: 3rem 0 4rem;
+            flex-wrap: wrap;
+        }
+
+        /* 主内容区 — 文章列表 */
+        .main-blog {
+            flex: 2.5;
+            min-width: 0; /* 防止溢出 */
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            flex: 1.2;
+            min-width: 240px;
+        }
+
+        /* ---------- 文章卡片样式 ---------- */
+        .post-card {
+            background: var(--card-white);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            border: 1px solid var(--border-light);
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: #cbd5e1;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background-color: #e2e8f0;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .post-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .post-title a {
+            color: var(--text-primary);
+        }
+
+        .post-title a:hover {
+            color: var(--accent);
+        }
+
+        .post-excerpt {
+            color: var(--text-secondary);
+            margin: 0.75rem 0 1.25rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+            color: var(--accent);
+            border-bottom: 1.5px solid transparent;
+        }
+
+        .read-more:hover {
+            gap: 0.7rem;
+            border-bottom-color: var(--accent);
+        }
+
+        /* 标签样式 */
+        .post-tags {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: #eef2ff;
+            color: var(--accent-dark);
+            font-size: 0.7rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* ---------- 侧边栏组件 ---------- */
+        .sidebar-widget {
+            background: var(--card-white);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .widget-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-left: 4px solid var(--accent);
+            padding-left: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        /* 作者简介 */
+        .author-avatar {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 3px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .author-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .author-bio {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0.75rem 0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            font-size: 0.9rem;
+            background: #f1f5f9;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-weight: 500;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* 最近文章列表 */
+        .recent-posts-list {
+            list-style: none;
+        }
+
+        .recent-posts-list li {
+            margin-bottom: 1rem;
+            border-bottom: 1px dashed var(--border-light);
+            padding-bottom: 0.75rem;
+        }
+
+        .recent-posts-list li a {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .recent-posts-list li a:hover {
+            color: var(--accent);
+        }
+
+        .recent-date {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* 分类列表 */
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .category-item {
+            background: #f1f5f9;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .category-item:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* 搜索框 */
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 60px;
+            font-size: 0.9rem;
+            background: #f9fafb;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+        }
+
+        .search-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 0 1.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        /* ---------- 页脚 ---------- */
+        .site-footer {
+            border-top: 1px solid var(--border-light);
+            padding: 2rem 0 2rem;
+            background: white;
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-links a {
+            margin-left: 1.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* ---------- 响应式设计 ---------- */
+        @media (max-width: 880px) {
+            .content-grid {
+                flex-direction: column;
+            }
+            .sidebar {
+                order: 2;
+            }
+            .main-blog {
+                order: 1;
+            }
+            .header-inner {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1rem;
+            }
+            .post-title {
+                font-size: 1.3rem;
+            }
+            .card-img {
+                height: 180px;
+            }
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-links a {
+                margin: 0 0.75rem;
+            }
+        }
+
+        /* 分隔装饰 */
+        .section-header {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.8rem;
+            letter-spacing: -0.3px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-header:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <div class="logo-area">
+            <h1>infos to be filled</h1>
+            <p>infos to be filled</p>
+        </div>
+        <div class="nav-links">
+            <a href="#">首页</a>
+            <a href="#">文章</a>
+            <a href="#">关于</a>
+            <a href="#">归档</a>
+            <a href="#">外部</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="content-grid">
+        <!-- 主要博客内容区域：文章列表 -->
+        <main class="main-blog">
+            <!-- 可选：提示最新文章 (装饰) -->
+            <div class="section-header">最新笔谈</div>
+            
+            
+            <!-- 简易分页占位 (仅样式) -->
+            <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                <a href="#" style="color: var(--accent); font-weight: 500;">← 上一页</a>
+                <span style="color: var(--text-muted);">第 1 / 3 页</span>
+                <a href="#" style="color: var(--accent); font-weight: 500;">下一页 →</a>
+            </div>
+        </main>
+
+        <!-- 侧边栏区域 -->
+        <aside class="sidebar">
+            <!-- 个人简介卡片 -->
+            <div class="sidebar-widget">
+                <img class="author-avatar" src="https://picsum.photos/id/64/200/200" alt="博主头像">
+                <div class="author-name">infos to be filled</div>
+                <div class="author-bio">infos to be filled</div>
+                <div class="social-links">
+                    <a href="#">GitHub</a>
+                    <a href="#">Discord</a>
+                    <a href="#">Bilibili</a>
+                </div>
+            </div>
+
+            <!-- 搜索框组件 -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">🔍 搜一下</h3>
+                <div class="search-form">
+                    <input type="text" class="search-input" placeholder="搜文章、标签...">
+                    <button class="search-btn">Go</button>
+                </div>
+            </div>
+
+            <!-- 热门/最近文章 -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📖 近期热门</h3>
+                <ul class="recent-posts-list">
+                </ul>
+            </div>
+
+            <!-- 文章分类 -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">📂 探索分类</h3>
+                <div class="category-list">
+                    <a href="#" class="category-item">前端开发</a>
+                    <a href="#" class="category-item">后端架构</a>
+                    <a href="#" class="category-item">开源工具</a>
+                    <a href="#" class="category-item">读书笔记</a>
+                    <a href="#" class="category-item">生活随想</a>
+                    <a href="#" class="category-item">AI & 数据</a>
+                </div>
+            </div>
+
+            <!-- 友情链接/推荐订阅 -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">✨ 友链</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div>©</div>
+        <div class="footer-links">
+            <a href="#">内容许可</a>
+            <a href="#">联系我</a>
+            <a href="#">回到顶部 ↑</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
