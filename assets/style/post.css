@@ -1,0 +1,24 @@
+.content-grid {
+    display: block;
+    margin: 3rem 0 4rem;
+}
+.main-blog {
+    width: 100%;
+    max-width: 100%;
+}
+.post-card {
+    margin-bottom: 0;
+}
+.post-body {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 1rem 0 1.25rem;
+}
+.back-link {
+    text-align: center;
+    margin-top: 2rem;
+}
+.back-link a {
+    color: #2563eb;
+    font-weight: 600;
+}

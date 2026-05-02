@@ -1,0 +1,76 @@
+.content-grid {
+    display: block;
+    margin: 3rem 0 4rem;
+}
+.main-blog {
+    width: 100%;
+    max-width: 100%;
+}
+.post-card {
+    margin-bottom: 2rem;
+}
+.about-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: var(--shadow-md);
+    margin: 0 auto 1.5rem;
+    display: block;
+}
+.about-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.about-bio {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+.about-section {
+    margin: 2rem 0;
+}
+.about-section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--accent);
+    padding-left: 0.75rem;
+}
+.about-section p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+}
+.about-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+.about-links a {
+    background: #f1f5f9;
+    padding: 0.4rem 1rem;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+.about-links a:hover {
+    background: var(--accent);
+    color: white;
+}
+.team-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), #1e40af);
+    color: white;
+    padding: 0.3rem 0.9rem;
+    border-radius: 40px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}

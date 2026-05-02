@@ -1,0 +1,31 @@
+/* Blog 专属样式：取消侧边栏，扩展主体 */
+.content-grid {
+    display: block;
+    margin: 3rem 0 4rem;
+}
+.main-blog {
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+.section-header {
+    grid-column: 1 / -1;
+}
+.post-card {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+.post-card:last-child {
+    margin-bottom: 0;
+}
+@media (max-width: 880px) {
+    .main-blog {
+        display: block;
+    }
+    .post-card {
+        margin-bottom: 2rem;
+    }
+}
