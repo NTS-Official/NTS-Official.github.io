@@ -454,3 +454,32 @@ img {
     background: var(--accent);
     border-radius: 3px;
 }
+
+
+/* ---------- 站点背景图 ---------- */
+/* public/assets/pictures/background.jpg 之前一直被放在仓库里但从未被引用。
+   这里把它接到博客各页的背景上。
+   两个要点：
+   1. 用 body::before 而不是 body 的背景，因为 body 自身有 background-color
+      （--bg-site 浅灰），背景图会被它盖住；
+   2. 图片上盖一层半透明白色遮罩，否则正文/卡片对比度不足，可读性会变差。
+   团队页有独立的 team.css，不受这里影响。 */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)),
+                      url('/assets/pictures/background.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* 移动端 fixed 背景在部分浏览器上会引起滚动性能问题，改用随页面滚动 */
+@media (max-width: 880px) {
+    body::before {
+        position: absolute;
+    }
+}
