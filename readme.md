@@ -1,5 +1,5 @@
 # NoTuring_Steve 的个人页面
-
+### 我觉得没有人会想要看这个
 <https://nts-official.github.io/>
 
 以前是 11 个手写 HTML：每发一篇文章都要复制一遍 header/nav/footer、手动往列表页插卡片、
@@ -116,24 +116,6 @@ scripts/
   new-post.mjs               新建文章
 .github/workflows/deploy.yml 构建并部署到 GitHub Pages
 ```
-
-## 三个容易踩的坑（都已处理）
-
-**1. 静态资源目录不能写成 `publicDir: './assets'`。**
-Vite 会把 `publicDir` 的**内容**铺到 `dist` 根，于是产物变成 `dist/style/main.css`，
-而页面里引用的还是 `/assets/style/main.css`，全站资源 404。
-所以 `publicDir` 用 Astro 默认的 `./public`，静态资源放 `public/assets/` 下，
-产物即 `dist/assets/...`，公开网址 `/assets/style/main.css` 与迁移前完全一致。
-
-**2. 内容集合不支持 `.html` 条目。**
-glob loader 只注册了 markdown 扩展名，`.html` 会报 `No entry type found`，文章一篇都加载不到。
-所以正文用 `.md`（Markdown 里本来就可以内嵌 HTML）。
-另外 Content Layer 的条目没有 `.render()` 方法，要用 `astro:content` 导出的 `render(post)`。
-
-**3. 两个页面的 `.nav-links` 会互相污染。**
-博客的 `main.css` 和团队的 `team.css` 都有 `.nav-links`。团队页只加载自己的样式，
-但为防止将来被交叉引用，`team.css` 里已限定成 `.navbar .nav-links`。
-
 ## scripts/astro.mjs 是干什么的
 
 一个 20 行的包装器，把 astro 命令的环境变量处理掉：
@@ -159,10 +141,3 @@ workflow 里的分支必须与默认分支一致：**本仓库默认分支是 `p
 gh run list --limit 10          # 需要 gh CLI
 ```
 `startup_failure` 表示 workflow 根本没启动（YAML 或权限问题），不是构建失败。
-
-## 其他已知问题
-
-- 首页/关于页的头像用的是 `raw.githubusercontent.com` 上 `personal` 分支的图片，
-  该分支若被删除头像就会挂；本地 `public/assets/pictures/avatar_current.png` 是另一份。
-- `public/assets/pictures/background.jpg` 目前没有任何页面引用，可以考虑删除。
-- 团队页的作品卡没有配图（原来就是空的）。
