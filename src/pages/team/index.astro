@@ -1,0 +1,250 @@
+---
+// 星辰元素团队页。
+// 这是自成一体的页面：它有自己的导航栏、字体和配色，
+// 与博客主线（main.css）的设计体系完全不同，所以不复用 BaseLayout。
+import '../../styles/team.css';
+
+// 成员 / 作品用数据驱动，加人只要往数组里加一条。
+const members = [
+  {
+    avatar: '林',
+    name: 'Stargray Lin',
+    role: '创始人',
+    bio: 'aka NoTuring_Steve，业余开发者。',
+    socials: [{ href: 'https://github.com/NTS-Official', icon: 'fab fa-github', label: 'GitHub' }],
+  },
+  {
+    avatar: '朱',
+    name: '朱泽熹',
+    role: '学科顾问',
+    bio: '39th CChO省一，擅长化学与数学。',
+    socials: [],
+  },
+  {
+    avatar: '薛',
+    name: '薛懿宸',
+    role: '化学出题人',
+    bio: '曾参与多次线上联考的出题工作。',
+    socials: [],
+  },
+];
+
+const works = [
+  {
+    title: 'Kemonini TeaCraft Mod',
+    desc: '一款基于Minecraft的模组，为游戏增添了丰富的茶文化元素和独特的视觉风格。',
+    tags: ['Minecraft Mod', 'Arts'],
+    // 没有配图时留空，占位注释不要再塞进 url() 里（原来那行会产生非法 CSS）
+    image: '',
+  },
+  {
+    title: '供题',
+    desc: '做题区的供题',
+    tags: ['供题', 'Science'],
+    image: '',
+  },
+];
+
+const navItems = [
+  { id: 'about', label: '关于' },
+  { id: 'history', label: '历程' },
+  { id: 'team', label: '成员' },
+  { id: 'works', label: '作品' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="星辰元素团队中心页 - 汇聚创意灵魂，打造数字星辉。了解我们的团队、历史与作品。">
+    <title>星辰元素 | 创作团队</title>
+    <link rel="icon" href="/assets/pictures/avatar_current.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">星辰<span>元素</span></div>
+        <ul class="nav-links">
+            {navItems.map((item) => (
+                <li><a href={`#${item.id}`} data-nav={item.id}>{item.label}</a></li>
+            ))}
+        </ul>
+    </div>
+</nav>
+
+<main>
+    <!-- Hero 区 -->
+    <div class="hero">
+        <div class="container">
+            <h1>超越传统命题<br>创建数字星星</h1>
+            <div class="tagline">科学 · 游戏 · 做题</div>
+            <a href="https://github.com/Team-Astralisium" class="btn">前往我们的GitHub页面 <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <!-- 团队介绍 About 部分 -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">关于星辰元素 / About</h2>
+            <div class="intro-grid">
+                <div class="intro-text">
+                    <p><strong>Team Astralisium</strong> 成立于2025年，是一支由跨领域创作者组成的独立创意团队。</p>
+                </div>
+                <div class="intro-stats">
+                    <div class="stat-item"><div class="stat-number">[REDACTED] 名</div><div>创作者</div></div>
+                    <div class="stat-item"><div class="stat-number">5 个</div><div>项目</div></div>
+                    <div class="stat-item"><div class="stat-number">[REDACTED] 个</div><div>Awards</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 历史里程碑 -->
+    <section id="history">
+        <div class="container">
+            <h2 class="section-title">星辰纪事 / Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2025 / 9 / 7</div>
+                    <div class="timeline-content">
+                        <h4>✨ 团队成立 · 一切奇迹的始发点</h4>
+                        <p>在 39th CChO 结束后，多位坠机的竞赛生因为各种原因聚集到了一起。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2026 / 1 / 1</div>
+                    <div class="timeline-content">
+                        <h4>✍️ 学科方面 · 参与多个联考</h4>
+                        <p>参与“天工杯”线上联考的化学命题。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 团队成员 section -->
+    <section id="team">
+        <div class="container">
+            <h2 class="section-title">成员 / Members</h2>
+            <div class="team-grid">
+                {members.map((m) => (
+                    <div class="member-card">
+                        <div class="member-avatar">{m.avatar}</div>
+                        <div class="member-name">{m.name}</div>
+                        <div class="member-role">{m.role}</div>
+                        <div class="member-bio">{m.bio}</div>
+                        {m.socials.length > 0 && (
+                            <div class="member-social">
+                                {m.socials.map((s) => (
+                                    <a href={s.href} aria-label={s.label}><i class={s.icon}></i></a>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- 主要作品 section -->
+    <section id="works">
+        <div class="container">
+            <h2 class="section-title">作品 / Masterpieces</h2>
+            <div class="works-grid">
+                {works.map((w) => (
+                    <div class="work-card">
+                        <div class="work-img" style={w.image ? `background-image: url('${w.image}'); background-size: cover;` : undefined}></div>
+                        <div class="work-info">
+                            <div class="work-title">{w.title}</div>
+                            <div class="work-desc">{w.desc}</div>
+                            {w.tags.map((t, i) => (
+                                <span class="work-tag" style={i > 0 ? 'margin-left: 6px;' : undefined}>{t}</span>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#about">关于</a>
+            <a href="#team">团队</a>
+            <a href="#works">作品</a>
+            <a href="#contact">联系我们</a>
+        </div>
+        <div class="copyright">
+            <i class="far fa-copyright"></i> 2026 星辰元素 Team Astralisium — 灵感源自尘埃，璀璨于星河。
+        </div>
+        <div id="contact" style="font-size:0.8rem; opacity:0.6;">
+            <i class="fas fa-map-marker-alt"></i> Location REDACTED | <i class="fas fa-envelope"></i>
+        </div>
+    </div>
+</footer>
+
+<a href="#" class="back2top" aria-label="返回顶部"><i class="fas fa-arrow-up"></i></a>
+
+<script>
+    // 平滑滚动 + 导航高亮。
+    // 用 data-nav 精确定位本页导航，避免像原来那样用全局 `.nav-links a`
+    // 选择器（改成 Astro 组件后那个选择器会命中博客页的元素）。
+    const navLinks = document.querySelectorAll('.navbar .nav-links a');
+    const sections = document.querySelectorAll('section, .hero');
+    const heroDiv = document.querySelector('.hero');
+    if (heroDiv && !heroDiv.id) heroDiv.id = 'hero-top';
+
+    function highlightNav() {
+        const scrollPos = window.scrollY + 120;
+        let activeId = '';
+        sections.forEach((section) => {
+            if (section.id) {
+                const offsetTop = section.offsetTop;
+                const offsetBottom = offsetTop + section.offsetHeight;
+                if (scrollPos >= offsetTop && scrollPos < offsetBottom) activeId = section.id;
+            }
+        });
+        if (!activeId && heroDiv && heroDiv.id && scrollPos < heroDiv.offsetTop + heroDiv.offsetHeight) {
+            activeId = 'hero-top';
+        }
+        navLinks.forEach((link) => {
+            link.style.color = '';
+            const href = link.dataset.nav ?? '';
+            if (href === activeId) {
+                link.style.color = '#b1622c';
+                link.style.fontWeight = '600';
+            } else {
+                link.style.fontWeight = '500';
+            }
+        });
+    }
+
+    window.addEventListener('scroll', highlightNav);
+    window.addEventListener('load', highlightNav);
+
+    navLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.dataset.nav ?? '';
+            const targetEl = targetId ? document.getElementById(targetId) : null;
+            if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    const backBtn = document.querySelector('.back2top');
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+</script>
+</body>
+</html>

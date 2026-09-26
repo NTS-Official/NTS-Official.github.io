@@ -1,8 +1,10 @@
-name: Deploy to GitHub Pages
+name: Deploy Astro site to Pages
 
+# 注意：本仓库默认分支是 personal，不是 main。
+# 之前 branches 写 [main]，所以 push 到 personal 时这个 workflow 根本不会触发。
 on:
   push:
-    branches: [main]
+    branches: [personal]
   workflow_dispatch:
 
 permissions:

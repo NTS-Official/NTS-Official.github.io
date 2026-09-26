@@ -65,24 +65,24 @@ body {
     -webkit-background-clip: unset;
     background-clip: unset;
 }
-.nav-links {
+.navbar .nav-links {
     display: flex;
     gap: 2.2rem;
     list-style: none;
 }
-.nav-links a {
+.navbar .nav-links a {
     text-decoration: none;
     font-weight: 500;
     color: #2c393e;
     transition: color 0.2s;
     font-size: 1rem;
 }
-.nav-links a:hover {
+.navbar .nav-links a:hover {
     color: #1940ac;
 }
 /* 移动端菜单简单适配 */
 @media (max-width: 768px) {
-    .nav-links {
+    .navbar .nav-links {
         gap: 1rem;
     }
     .container {

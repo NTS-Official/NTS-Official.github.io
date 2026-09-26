@@ -1,0 +1,12 @@
+# 统一用 LF 存储：仓库里所有文本文件都是 LF，
+# 而 Windows 上 core.autocrlf=true 会反复提示"LF will be replaced by CRLF"。
+* text=auto eol=lf
+
+# 二进制文件不要被当成文本处理
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
