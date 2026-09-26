@@ -126,18 +126,47 @@ scripts/
    包装器统一注入 `ASTRO_TELEMETRY_DISABLED=1`。
 3. 用 `stdio: 'inherit'` 而不是管道，输出实时透传。
 
-## 部署（重要：需要手动做一次设置）
 
-**仓库 Settings → Pages → Build and deployment → Source 必须选 "GitHub Actions"。**
+## 部署（已配置完成，这里是维护须知）
 
-目前这里是失效状态：旧的 "Deploy from a branch" 源指向的分支根目录已经没有 `index.html` 了
-（旧手写页面本次迁移已删除），而 Actions 源又没开启，所以在开启之前部署不可能成功。
+推送到 `personal` 分支即自动构建 + 部署，2026-09-26 起已验证可用（build 19s + deploy 10s）。
 
-workflow 里的分支必须与默认分支一致：**本仓库默认分支是 `personal`，不是 `main`**。
-写错分支时 workflow 会静默地完全不触发。
+两个必须记住的前提：
 
-排查用：
+1. **Settings → Pages → Build and deployment → Source 必须是 "GitHub Actions"。**
+   如果它退回 "Deploy from a branch"，而分支根目录已经没有 `index.html`
+   （旧手写页面本次迁移已删除），部署就会失效。
+2. **workflow 里的分支必须与默认分支一致：本仓库默认分支是 `personal`，不是 `main`。**
+   写错分支时 workflow 会静默地完全不触发（`gh run list` 里查无此 workflow）。
+
+### 排查 startup_failure
+
+`startup_failure` 且 **0 个 job、无日志、耗时 0s**，表示 GitHub 在启动校验阶段就拒绝了这次运行，
+不是构建失败。本次迁移中踩过一次，成因是上面第 1 条 —— Pages 的 Source 处于失效状态时，
+部署类 workflow 会被直接拒绝启动。
+
+排查命令（需 gh CLI 认证）：
+
 ```bash
-gh run list --limit 10          # 需要 gh CLI
+gh auth login
+gh run list --limit 10
+gh run view <run-id>                                   # 看 job 是否真的存在
+gh api repos/<owner>/<repo>/actions/permissions        # allowed_actions 是否为 all
+gh api repos/<owner>/<repo>/environments/github-pages/deployment-branch-policies
 ```
-`startup_failure` 表示 workflow 根本没启动（YAML 或权限问题），不是构建失败。
+
+二分定位法：临时加一个只含 runs-on: ubuntu-latest + echo 的最小 workflow。
+它能跑通就说明仓库/账号/触发条件都正常，问题在出故障的那个文件里。
+
+### 已知告警（不影响运行）
+
+actions/checkout@v4、setup-node@v4、configure-pages@v5、upload-pages-artifact@v3、
+deploy-pages@v4 目前都指向 Node.js 20，GitHub 会在日志里给出弃用告警（已被强制跑在 Node 24 上）。
+将来这些 action 发新版时顺手升一下即可。
+
+## 其他已知问题
+
+- 首页/关于页的头像用的是 raw.githubusercontent.com 上 personal 分支的图片，
+  该分支若被删除头像就会挂；本地 public/assets/pictures/avatar_current.png 是另一份。
+- public/assets/pictures/background.jpg 目前没有任何页面引用，可以考虑删除。
+- 团队页的作品卡没有配图（原来就是空的）。
