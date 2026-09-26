@@ -1,0 +1,13 @@
+name: Minimal Probe
+
+on:
+  push:
+    branches: [personal]
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo
+        run: echo "actions are working"
