@@ -29,3 +29,14 @@
         margin-bottom: 2rem;
     }
 }
+
+/* ---------- 已弃用（Deprecated）文章 ---------- */
+.post-title a.is-deprecated {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--text-muted);
+    text-decoration-thickness: 1.5px;
+}
+.post-title a.is-deprecated:hover {
+    color: var(--accent);
+}

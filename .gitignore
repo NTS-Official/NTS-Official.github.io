@@ -1,0 +1,15 @@
+# 构建产物
+dist/
+.astro/
+
+# 依赖
+node_modules/
+
+# 本地 npm 缓存（沙箱内安装依赖时使用）
+.npm-cache/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

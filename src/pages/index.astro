@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLatestPost, formatDate, displayTitle, postPath } from '../lib/posts';
+
+// 首页"动态"栏以前要手动把最新一篇同步过来，现在自动取（已弃用的文章会被跳过）。
+const latest = await getLatestPost();
+---
+
+<BaseLayout title="NoTuring_Steve 的个人页面">
+    <div class="section-header">动态</div>
+    {latest && (
+        <article class="post-card">
+            <div class="card-content">
+                <div class="post-meta">
+                    <span>📅 {formatDate(latest.data.pubDate)}</span>
+                </div>
+                <h2 class="post-title">
+                    <a href={postPath(latest)} class={latest.data.deprecated ? 'is-deprecated' : undefined}>{displayTitle(latest)}</a>
+                </h2>
+                <p class="post-excerpt" set:html={latest.data.excerpt} />
+                {latest.data.tags.length > 0 && (
+                    <div class="post-tags">
+                        {latest.data.tags.map((tag) => <a class="tag">#{tag}</a>)}
+                    </div>
+                )}
+            </div>
+        </article>
+    )}
+    <div class="post-card" style="text-align: center; padding: 1.5rem;">
+        <a href="/blog/index.html" style="color: #2563eb; font-weight: 600;">查看全部动态 →</a>
+    </div>
+
+    <aside slot="aside" class="sidebar" id="side-bar">
+        <div class="sidebar-widget">
+            <img class="author-avatar" src="https://raw.githubusercontent.com/NTS-Official/NTS-Official.github.io/personal/assets/pictures/avatar_current.png" alt="头像">
+            <div class="author-name">NoTuring_Steve</div>
+            <div class="author-bio">只是一只经常咕咕咕的作者……</div>
+            <div class="social-links">
+                <a href="https://github.com/NTS-Official">GitHub</a>
+                <a href="https://discord.com/users/748464606405722203">Discord</a>
+                <a href="https://space.bilibili.com/646854677">Bilibili</a>
+            </div>
+        </div>
+
+        <div class="sidebar-widget">
+            <h3 class="widget-title">✨ 外部链接</h3>
+            <a href="/assets/team/index.html"><span style="color: #2563eb;">Team Astralisium</span></a>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            </div>
+        </div>
+    </aside>
+</BaseLayout>

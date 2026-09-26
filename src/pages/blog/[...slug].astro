@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, displayTitle } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+// Content Layer 条目没有 .render()，必须用 astro:content 导出的 render()
+const { Content } = await render(post);
+---
+
+<BaseLayout title={`${post.data.title} - NoTuring_Steve 的个人页面`} description={post.data.title}>
+    <Fragment slot="head"><link rel="stylesheet" href="/assets/style/post.css"></Fragment>
+
+    <article class="post-card">
+        <div class="card-content">
+            <div class="post-meta">
+                <span>📅 {formatDate(post.data.pubDate)}</span>
+                {post.data.updatedDate && <span>🔄 更新于 {formatDate(post.data.updatedDate)}</span>}
+            </div>
+            <h2 class="post-title">{displayTitle(post)}</h2>
+            <div class="post-body">
+                <Content />
+            </div>
+            {post.data.tags.length > 0 && (
+                <div class="post-tags">
+                    {post.data.tags.map((tag) => <a class="tag">#{tag}</a>)}
+                </div>
+            )}
+        </div>
+    </article>
+    <div class="back-link">
+        <a href="/blog/index.html">← 返回动态列表</a>
+    </div>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getSortedPosts, formatDate, displayTitle, postPath } from '../../lib/posts';
+
+// 以前这张列表是手写的：新增一篇文章要手动插卡片 + 手动按日期排序。
+// 现在完全由内容集合生成。
+const posts = await getSortedPosts();
+---
+
+<BaseLayout title="所有动态 - NoTuring_Steve 的个人页面">
+    <Fragment slot="head"><link rel="stylesheet" href="/assets/style/blog.css"></Fragment>
+
+    <div class="section-header">所有动态</div>
+    {posts.map((post) => (
+        <article class="post-card">
+            <div class="card-content">
+                <div class="post-meta">
+                    <span>📅 {formatDate(post.data.pubDate)}</span>
+                </div>
+                <h2 class="post-title">
+                    <a href={postPath(post)} class={post.data.deprecated ? 'is-deprecated' : undefined}>{displayTitle(post)}</a>
+                </h2>
+                <p class="post-excerpt" set:html={post.data.excerpt} />
+                {post.data.tags.length > 0 && (
+                    <div class="post-tags">
+                        {post.data.tags.map((tag) => <a class="tag">#{tag}</a>)}
+                    </div>
+                )}
+            </div>
+        </article>
+    ))}
+</BaseLayout>
