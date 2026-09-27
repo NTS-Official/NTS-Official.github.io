@@ -1,0 +1,187 @@
+---
+// Neolectrum / wgpu-mc-neo 项目介绍页。
+//
+// 注意路径形式：这里用 projects/neolectrum/index.astro 而不是 neolectrum.astro，
+// 因为 build.format 是 'preserve' —— 后者会输出成 /projects/neolectrum.html，
+// 只有目录形式的 index.astro 才能得到 /projects/neolectrum 这个干净网址。
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const repo = 'https://github.com/NTS-Official/wgpu-mc-neo';
+const upstream = 'https://github.com/wgpu-mc/wgpu-mc';
+const discord = 'https://discord.gg/NTuK8bQ2hn';
+const matrix = 'https://matrix.to/#/#wgpu-mc:matrix.org';
+
+// 项目事实，全部取自仓库当前状态
+const facts = [
+  { k: '模组版本', v: '2612.0.7-alpha' },
+  { k: '运行环境', v: 'Minecraft 26.1 · NeoForge 26.1.2.109' },
+  { k: '渲染后端', v: 'Vulkan · DirectX 12' },
+  { k: '语言构成', v: 'Rust · Kotlin · WGSL · Java' },
+  { k: '许可证', v: 'MPL-2.0' },
+  { k: '命名空间', v: 'dev.birb.wgpu' },
+];
+
+// 架构：Kotlin 侧把 Blaze3D 的每个环节换成 wgpu 实现
+const layers = [
+  { name: 'Mixin 注入层', desc: '在游戏启动时劫持原有 GL 渲染器，共 30 个 mixin' },
+  { name: 'Kotlin 后端层', desc: 'WgpuDevice / Buffer / Texture / CommandEncoder / CompiledRenderPipeline' },
+  { name: 'JNI 桥接层', desc: 'wgpu-mc-jni，暴露约 1.5 万行 Rust 接口给 JVM' },
+  { name: 'Rust 引擎层', desc: 'wgpu-mc，渲染图、管线、地形烘焙、天空与实体' },
+  { name: '着色器转译层', desc: 'cyntax，GLSL → WGSL 的完整转译流程' },
+];
+
+const shaders = ['sky_scatter', 'sky_fog', 'stars', 'grass', 'entity', 'electrum_gui', 'debug_lines', 'clear'];
+
+const highlights = [
+  {
+    title: '替换 Blaze3D，而不是打补丁',
+    body: '从设备、缓冲区、纹理、命令编码器到已编译管线，Blaze3D 的每一环都有对应的 wgpu 实现。渲染后端因此可以在 Vulkan 与 DirectX 12 之间切换。',
+  },
+  {
+    title: 'GLSL → WGSL 完整转译',
+    body: '不是重写着色器，而是把 Minecraft 原有的 GLSL 经 cyntax 转译成 WGSL，再交给基于 WebGPU 的渲染管线执行。',
+  },
+  {
+    title: '跨 API 的图形栈',
+    body: '目标是把玩家从 OpenGL 的束缚里解放出来 —— DirectX 12、Vulkan、Metal，乃至更多后端，同一套引擎。',
+  },
+  {
+    title: '模组内的渲染设置面板',
+    body: '由 Rust 侧定义、经 JNI 读取 JSON，Kotlin 动态生成选项界面。加一个渲染开关不需要手写 GUI 代码。',
+  },
+];
+
+const status = [
+  { label: '地形渲染', state: '进行中', note: '区块烘焙已下放到 Rust 侧，近期在修地形透明与 bind group 正确性' },
+  { label: '天空与雾', state: '已有实现', note: 'sky_scatter / sky_fog / stars 等着色器' },
+  { label: '实体渲染', state: '进行中', note: '模型部件上传与实体状态同步' },
+  { label: 'GUI 渲染', state: '已有实现', note: 'electrum_gui 着色器 + 自绘控件体系' },
+  { label: '光追 / DLSS 系列', state: '已放弃', note: '受 WebGPU 能力所限，需 hook C++ 库，收益不值' },
+];
+---
+
+<BaseLayout title="Neolectrum — Rust 渲染引擎模组 - NoTuring_Steve 的个人页面" description="Neolectrum（wgpu-mc-neo）：用 Rust 与 WebGPU 重写 Minecraft 渲染引擎的 NeoForge 模组">
+    <Fragment slot="head"><link rel="stylesheet" href="/assets/style/project.css"></Fragment>
+
+    <!-- Hero -->
+    <section class="proj-hero">
+        <img class="proj-logo" src="/assets/pictures/neolectrum-logo.png" alt="wgpu-mc logo">
+        <div class="proj-hero-text">
+            <div class="proj-eyebrow">项目 / Projects</div>
+            <h1>Neolectrum</h1>
+            <p class="proj-sub">用 Rust 与 WebGPU 重写的 Minecraft 渲染引擎</p>
+            <p class="proj-desc">
+                一个 NeoForge 模组，通过 mixin 在启动时接管原有 GL 渲染器，
+                把 Minecraft 的渲染后端替换为 <strong>Vulkan</strong> 或 <strong>DirectX 12</strong>。
+                仓库名为 <code>wgpu-mc-neo</code>，是 <a href={upstream}>wgpu-mc</a> 的非官方 NeoForge 分支。
+            </p>
+            <div class="proj-badges">
+                <span class="proj-badge">Powered by WebGPU</span>
+                <span class="proj-badge">Rust</span>
+                <span class="proj-badge">NeoForge</span>
+                <span class="proj-badge warn">Alpha · 开发中</span>
+            </div>
+            <div class="proj-actions">
+                <a class="proj-btn primary" href={repo}>源码仓库</a>
+                <a class="proj-btn" href={discord}>Discord</a>
+                <a class="proj-btn" href={matrix}>Matrix</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 事实表 -->
+    <section class="proj-facts">
+        {facts.map((f) => (
+            <div class="fact">
+                <div class="fact-k">{f.k}</div>
+                <div class="fact-v">{f.v}</div>
+            </div>
+        ))}
+    </section>
+
+    <!-- 它是什么 -->
+    <section class="proj-section">
+        <h2 class="proj-h2">它是什么</h2>
+        <p>
+            <a href={upstream}>wgpu-mc</a> 始于 2021 年末，是一个用 Rust 编写、基于
+            <code>wgpu</code> crate 的独立 WebGPU 渲染引擎，目标是给 Minecraft 换掉现有的 OpenGL 渲染器。
+            <strong>Neolectrum</strong> 就是把这个引擎接进 NeoForge 的那一层。
+        </p>
+        <p>
+            上游原项目距离既定目标仍有距离，因此本项目对 Rust 侧做了重构与改造，
+            <strong>不再是单纯跟随上游迁移的子项目</strong>；同时出于可维护性与作者精力的考虑，
+            已移除 Fabric 模组部分，只保留 NeoForge。
+        </p>
+        <p class="proj-note">
+            作者最初想在实验性项目里引入光追/路径追踪，以及 DirectX 下的 DLSS、DLSSD、DLSSR。
+            但受 WebGPU 能力所限，这些只能靠 hook C++ 库之类相当「脏」的手段实现，
+            所以本项目不再考虑这些方向，转而专注提升这个跨 API 图形项目的<strong>实用性与稳定性</strong>。
+        </p>
+    </section>
+
+    <!-- 核心特性 -->
+    <section class="proj-section">
+        <h2 class="proj-h2">核心特性</h2>
+        <div class="proj-grid">
+            {highlights.map((h) => (
+                <div class="proj-card">
+                    <h3>{h.title}</h3>
+                    <p>{h.body}</p>
+                </div>
+            ))}
+        </div>
+    </section>
+
+    <!-- 架构 -->
+    <section class="proj-section">
+        <h2 class="proj-h2">架构</h2>
+        <p>从 JVM 到 GPU，一次绘制会穿过这五层：</p>
+        <div class="proj-layers">
+            {layers.map((l, i) => (
+                <div class="layer">
+                    <div class="layer-idx">{i + 1}</div>
+                    <div class="layer-body">
+                        <div class="layer-name">{l.name}</div>
+                        <div class="layer-desc">{l.desc}</div>
+                    </div>
+                </div>
+            ))}
+        </div>
+        <h3 class="proj-h3">已落地的着色器</h3>
+        <div class="proj-tags">
+            {shaders.map((s) => <span class="proj-tag">{s}.wgsl</span>)}
+        </div>
+    </section>
+
+    <!-- 开发状态 -->
+    <section class="proj-section">
+        <h2 class="proj-h2">开发状态</h2>
+        <div class="proj-status">
+            {status.map((s) => (
+                <div class="status-row">
+                    <div class="status-label">{s.label}</div>
+                    <div class={'status-state ' + (s.state === '已放弃' ? 'dropped' : s.state === '已有实现' ? 'done' : 'wip')}>{s.state}</div>
+                    <div class="status-note">{s.note}</div>
+                </div>
+            ))}
+        </div>
+        <p class="proj-note">
+            当前处于 <strong>alpha</strong> 阶段，尚不可用于日常游戏。CI 在 Ubuntu 与 Windows 双平台、
+            Java 25 上执行构建。
+        </p>
+    </section>
+
+    <!-- 参与 -->
+    <section class="proj-section proj-cta">
+        <h2 class="proj-h2">参与贡献</h2>
+        <p>
+            项目仍在早期，欢迎任何形式的贡献 —— 无论是引擎、着色器、还是 NeoForge 侧的适配。
+            上游引擎的贡献入口在 <a href={upstream + '/labels/engine'}>{upstream.replace('https://github.com/', '')}/labels/engine</a>。
+        </p>
+        <div class="proj-actions">
+            <a class="proj-btn primary" href={repo}>GitHub</a>
+            <a class="proj-btn" href={repo + '/issues'}>问题反馈</a>
+            <a class="proj-btn" href={discord}>Discord 社区</a>
+        </div>
+    </section>
+</BaseLayout>

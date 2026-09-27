@@ -7,6 +7,22 @@ const latest = await getLatestPost();
 ---
 
 <BaseLayout title="NoTuring_Steve 的个人页面">
+    <div class="section-header">项目</div>
+    <article class="post-card">
+        <div class="card-content" style="display: flex; gap: 1.4rem; align-items: flex-start; flex-wrap: wrap;">
+            <img src="/assets/pictures/neolectrum-logo.png" alt="Neolectrum" style="width: 88px; height: auto; flex-shrink: 0; border-radius: 0.75rem;">
+            <div style="flex: 1; min-width: 220px;">
+                <h2 class="post-title"><a href="/projects/neolectrum">Neolectrum</a></h2>
+                <p class="post-excerpt">用 Rust 与 WebGPU 重写的 Minecraft 渲染引擎，把渲染后端换成 Vulkan 或 DirectX 12。NeoForge 模组，目前处于 alpha。</p>
+                <div class="post-tags">
+                    <span class="tag">#Rust</span>
+                    <span class="tag">#WebGPU</span>
+                    <span class="tag">#NeoForge</span>
+                </div>
+            </div>
+        </div>
+    </article>
+
     <div class="section-header">动态</div>
     {latest && (
         <article class="post-card">
