@@ -17,6 +17,9 @@ const nav = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- 明确告知浏览器本站只有浅色主题，避免深色模式下被自动变暗/反色 -->
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#f8fafc">
     <meta name="description" content={description}>
     <title>{title}</title>
     <link rel="icon" href="/assets/pictures/avatar_current.png">
@@ -28,7 +31,7 @@ const nav = [
 <header class="site-header">
     <div class="container header-inner">
         <div class="logo-area">
-            <h1>NoTuring_Steve <span style="color: #0f172a; font-size: 16px;">in <a href="https://github.com/Team-Astralisium">Team Astralisium</a></span></h1>
+            <h1>NoTuring_Steve <span class="logo-suffix">in <a href="https://github.com/Team-Astralisium">Team Astralisium</a></span></h1>
             <p>一个随便写两下就跑起来的博客。。。</p>
         </div>
         <div class="nav-links">

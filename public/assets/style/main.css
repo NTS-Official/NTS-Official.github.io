@@ -6,6 +6,11 @@
 }
 
 :root {
+    /* 本站是固定浅色设计，没有深色主题。声明 color-scheme: light 会让浏览器
+       停止自动变暗/反色 —— 否则系统深色模式下 --text-primary 这类深色文字
+       会被反转成浅色，落在同样被反转的浅色背景上直接看不见。
+       参考 https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme */
+    color-scheme: light;
     --bg-site: #f8fafc;
     --card-white: #ffffff;
     --text-primary: #0f172a;
@@ -75,6 +80,22 @@ img {
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+}
+
+/* 头部标题里 "in Team Astralisium" 的后缀。
+   原来在 BaseLayout 里写死 style="color:#0f172a"，深色模式下会被反转成不可见；
+   这里改用变量，跟随主题。 */
+.logo-suffix {
+    color: var(--text-primary);
+    font-size: 16px;
+}
+
+/* h1 用了 background-clip: text + color: transparent 来做渐变文字。
+   嵌套的子元素在部分浏览器里不会被父级的渐变背景覆盖，若没有自己的颜色
+   就会继承 transparent 而彻底看不见 —— 所以这里给链接显式上色。 */
+.logo-suffix a {
+    color: var(--accent-dark);
+    font-weight: 600;
 }
 
 .logo-area p {

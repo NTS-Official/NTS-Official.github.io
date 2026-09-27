@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+/* 团队页同样只有浅色设计，声明 color-scheme 以避免深色模式下被自动反色。 */
+:root {
+    color-scheme: light;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: #f8fbfe;
