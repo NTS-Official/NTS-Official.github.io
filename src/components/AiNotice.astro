@@ -1,0 +1,20 @@
+---
+// AI 代写提示条。
+// 默认文案即项目约定的告知内容；需要不同措辞时传 message 覆盖。
+interface Props {
+  message?: string;
+  compact?: boolean;
+}
+const {
+  message = '由于本人比较忙，因此页面内容使用 AI 代写，难免出现错误。',
+  compact = false,
+} = Astro.props;
+---
+
+<aside class:list={['ai-notice', { compact }]} role="note">
+    <span class="ai-notice-icon" aria-hidden="true">🤖</span>
+    <p class="ai-notice-text">
+        <strong>AI 提示</strong>
+        <span>{message}</span>
+    </p>
+</aside>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AiNotice from '../../components/AiNotice.astro';
 import { getSortedPosts, formatDate, displayTitle, postPath } from '../../lib/posts';
 
 // 以前这张列表是手写的：新增一篇文章要手动插卡片 + 手动按日期排序。
@@ -11,6 +12,7 @@ const posts = await getSortedPosts();
     <Fragment slot="head"><link rel="stylesheet" href="/assets/style/blog.css"></Fragment>
 
     <div class="section-header">所有动态</div>
+    <AiNotice />
     {posts.map((post) => (
         <article class="post-card">
             <div class="card-content">

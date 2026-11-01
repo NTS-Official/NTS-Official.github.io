@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AiNotice from '../components/AiNotice.astro';
 import { getLatestPost, formatDate, displayTitle, postPath } from '../lib/posts';
 
 // 首页"动态"栏以前要手动把最新一篇同步过来，现在自动取（已弃用的文章会被跳过）。
@@ -24,6 +25,7 @@ const latest = await getLatestPost();
     </article>
 
     <div class="section-header">动态</div>
+    <AiNotice />
     {latest && (
         <article class="post-card">
             <div class="card-content">
